@@ -59,24 +59,21 @@ function Library:CreateWindow(cfg)
         gui.Parent = LocalPlayer:WaitForChild("PlayerGui")
     end
 
-    local openBtn = Instance.new("ImageButton")
+    local openBtn = Instance.new("TextButton")
     openBtn.Size = UDim2.new(0, 42, 0, 42)
     openBtn.Position = UDim2.new(0, 14, 0.5, -21)
     openBtn.BackgroundColor3 = Theme.Background
+    openBtn.Text = "NX"
+    openBtn.TextColor3 = Theme.Accent
+    openBtn.Font = Enum.Font.GothamBold
+    openBtn.TextSize = 18
     openBtn.AutoButtonColor = false
     openBtn.Parent = gui
     openBtn.ZIndex = 100
     Corner(openBtn, 12)
     local openStroke = Stroke(openBtn, Theme.Accent, 1.5)
 
-    local openIcon = Instance.new("TextLabel")
-    openIcon.Size = UDim2.new(1, 0, 1, 0)
-    openIcon.BackgroundTransparency = 1
-    openIcon.Text = "◈"
-    openIcon.TextColor3 = Theme.Accent
-    openIcon.Font = Enum.Font.GothamBold
-    openIcon.TextSize = 18
-    openIcon.Parent = openBtn
+    local openIcon = openBtn
 
     local main = Instance.new("Frame")
     main.Size = UDim2.new(0, 480, 0, 340)
