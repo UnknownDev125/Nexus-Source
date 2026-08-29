@@ -1,6 +1,7 @@
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
 local CoreGui = game:GetService("CoreGui")
 local LocalPlayer = Players.LocalPlayer
 
@@ -475,225 +476,226 @@ function Library:CreateWindow(cfg)
         end
 
         function Tab:AddColorPicker(opts)
-    opts = opts or {}
-    local current = opts.Default or Theme.Accent
-    local recent = {}
+            opts = opts or {}
+            local current = opts.Default or Theme.Accent
+            local recent = {}
 
-    local f = Instance.new("Frame")
-    f.Size = UDim2.new(1, 0, 0, 34)
-    f.BackgroundColor3 = Theme.Surface
-    f.Parent = page
-    Corner(f, 8)
+            local f = Instance.new("Frame")
+            f.Size = UDim2.new(1, 0, 0, 34)
+            f.BackgroundColor3 = Theme.Surface
+            f.Parent = page
+            Corner(f, 8)
 
-    local l = Instance.new("TextLabel")
-    l.Size = UDim2.new(1, -48, 1, 0)
-    l.Position = UDim2.new(0, 12, 0, 0)
-    l.BackgroundTransparency = 1
-    l.Text = opts.Name or "Color"
-    l.TextColor3 = Theme.Text
-    l.Font = Enum.Font.Gotham
-    l.TextSize = 13
-    l.TextXAlignment = Enum.TextXAlignment.Left
-    l.Parent = f
+            local l = Instance.new("TextLabel")
+            l.Size = UDim2.new(1, -48, 1, 0)
+            l.Position = UDim2.new(0, 12, 0, 0)
+            l.BackgroundTransparency = 1
+            l.Text = opts.Name or "Color"
+            l.TextColor3 = Theme.Text
+            l.Font = Enum.Font.Gotham
+            l.TextSize = 13
+            l.TextXAlignment = Enum.TextXAlignment.Left
+            l.Parent = f
 
-    local prev = Instance.new("TextButton")
-    prev.Size = UDim2.new(0, 26, 0, 26)
-    prev.Position = UDim2.new(1, -36, 0.5, -13)
-    prev.BackgroundColor3 = current
-    prev.Text = ""
-    prev.AutoButtonColor = false
-    prev.Parent = f
-    Corner(prev, 6)
-    Stroke(prev, Theme.Border, 1)
+            local prev = Instance.new("TextButton")
+            prev.Size = UDim2.new(0, 26, 0, 26)
+            prev.Position = UDim2.new(1, -36, 0.5, -13)
+            prev.BackgroundColor3 = current
+            prev.Text = ""
+            prev.AutoButtonColor = false
+            prev.Parent = f
+            Corner(prev, 6)
+            Stroke(prev, Theme.Border, 1)
 
-    local popup = Instance.new("Frame")
-    popup.Size = UDim2.new(0, 220, 0, 0)
-    popup.Position = UDim2.new(1, -230, 0, 40)
-    popup.BackgroundColor3 = Theme.Background
-    popup.BorderSizePixel = 0
-    popup.Visible = false
-    popup.ZIndex = 50
-    popup.ClipsDescendants = true
-    popup.Parent = f
-    Corner(popup, 10)
-    Stroke(popup, Theme.Border, 1)
+            local popup = Instance.new("Frame")
+            popup.Size = UDim2.new(0, 220, 0, 0)
+            popup.Position = UDim2.new(1, -230, 0, 40)
+            popup.BackgroundColor3 = Theme.Background
+            popup.BorderSizePixel = 0
+            popup.Visible = false
+            popup.ZIndex = 50
+            popup.ClipsDescendants = true
+            popup.Parent = f
+            Corner(popup, 10)
+            Stroke(popup, Theme.Border, 1)
 
-    local popupLayout = Instance.new("UIListLayout")
-    popupLayout.Padding = UDim.new(0, 6)
-    popupLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    popupLayout.Parent = popup
-    Pad(popup, 10, 10, 10, 10)
+            local popupLayout = Instance.new("UIListLayout")
+            popupLayout.Padding = UDim.new(0, 6)
+            popupLayout.SortOrder = Enum.SortOrder.LayoutOrder
+            popupLayout.Parent = popup
+            Pad(popup, 10, 10, 10, 10)
 
-    local title = Instance.new("TextLabel")
-    title.Size = UDim2.new(1, 0, 0, 18)
-    title.BackgroundTransparency = 1
-    title.Text = "Colors"
-    title.TextColor3 = Theme.Text
-    title.Font = Enum.Font.GothamBold
-    title.TextSize = 12
-    title.TextXAlignment = Enum.TextXAlignment.Left
-    title.ZIndex = 51
-    title.Parent = popup
+            local title = Instance.new("TextLabel")
+            title.Size = UDim2.new(1, 0, 0, 18)
+            title.BackgroundTransparency = 1
+            title.Text = "Colors"
+            title.TextColor3 = Theme.Text
+            title.Font = Enum.Font.GothamBold
+            title.TextSize = 12
+            title.TextXAlignment = Enum.TextXAlignment.Left
+            title.ZIndex = 51
+            title.Parent = popup
 
-    local grid = Instance.new("Frame")
-    grid.Size = UDim2.new(1, 0, 0, 96)
-    grid.BackgroundTransparency = 1
-    grid.ZIndex = 51
-    grid.Parent = popup
+            local grid = Instance.new("Frame")
+            grid.Size = UDim2.new(1, 0, 0, 96)
+            grid.BackgroundTransparency = 1
+            grid.ZIndex = 51
+            grid.Parent = popup
 
-    local gridLayout = Instance.new("UIGridLayout")
-    gridLayout.CellSize = UDim2.new(0, 22, 0, 22)
-    gridLayout.CellPadding = UDim2.new(0, 5, 0, 5)
-    gridLayout.Parent = grid
+            local gridLayout = Instance.new("UIGridLayout")
+            gridLayout.CellSize = UDim2.new(0, 22, 0, 22)
+            gridLayout.CellPadding = UDim2.new(0, 5, 0, 5)
+            gridLayout.Parent = grid
 
-    local palette = {
-        Color3.fromRGB(255, 75, 85),
-        Color3.fromRGB(255, 120, 50),
-        Color3.fromRGB(255, 180, 40),
-        Color3.fromRGB(255, 220, 60),
-        Color3.fromRGB(180, 255, 60),
-        Color3.fromRGB(60, 200, 130),
-        Color3.fromRGB(40, 220, 200),
-        Color3.fromRGB(80, 200, 255),
-        Color3.fromRGB(90, 120, 255),
-        Color3.fromRGB(140, 90, 255),
-        Color3.fromRGB(200, 80, 255),
-        Color3.fromRGB(255, 100, 200),
-        Color3.fromRGB(255, 255, 255),
-        Color3.fromRGB(200, 200, 210),
-        Color3.fromRGB(120, 120, 130),
-        Color3.fromRGB(40, 40, 50),
-        Color3.fromRGB(0, 0, 0),
-        Color3.fromRGB(255, 0, 0),
-        Color3.fromRGB(0, 255, 0),
-        Color3.fromRGB(0, 100, 255),
-    }
+            local palette = {
+                Color3.fromRGB(255, 75, 85),
+                Color3.fromRGB(255, 120, 50),
+                Color3.fromRGB(255, 180, 40),
+                Color3.fromRGB(255, 220, 60),
+                Color3.fromRGB(180, 255, 60),
+                Color3.fromRGB(60, 200, 130),
+                Color3.fromRGB(40, 220, 200),
+                Color3.fromRGB(80, 200, 255),
+                Color3.fromRGB(90, 120, 255),
+                Color3.fromRGB(140, 90, 255),
+                Color3.fromRGB(200, 80, 255),
+                Color3.fromRGB(255, 100, 200),
+                Color3.fromRGB(255, 255, 255),
+                Color3.fromRGB(200, 200, 210),
+                Color3.fromRGB(120, 120, 130),
+                Color3.fromRGB(40, 40, 50),
+                Color3.fromRGB(0, 0, 0),
+                Color3.fromRGB(255, 0, 0),
+                Color3.fromRGB(0, 255, 0),
+                Color3.fromRGB(0, 100, 255),
+            }
 
-    local function setColor(c)
-        current = c
-        prev.BackgroundColor3 = c
-        if not table.find(recent, c) then
-            table.insert(recent, 1, c)
-            if #recent > 8 then table.remove(recent) end
-        end
-        if opts.Callback then opts.Callback(c) end
-    end
-
-    for _, col in ipairs(palette) do
-        local swatch = Instance.new("TextButton")
-        swatch.BackgroundColor3 = col
-        swatch.Text = ""
-        swatch.AutoButtonColor = false
-        swatch.ZIndex = 52
-        swatch.Parent = grid
-        Corner(swatch, 5)
-        swatch.MouseButton1Click:Connect(function()
-            setColor(col)
-        end)
-    end
-
-    local recentTitle = Instance.new("TextLabel")
-    recentTitle.Size = UDim2.new(1, 0, 0, 16)
-    recentTitle.BackgroundTransparency = 1
-    recentTitle.Text = "Recent"
-    recentTitle.TextColor3 = Theme.TextDim
-    recentTitle.Font = Enum.Font.Gotham
-    recentTitle.TextSize = 11
-    recentTitle.TextXAlignment = Enum.TextXAlignment.Left
-    recentTitle.ZIndex = 51
-    recentTitle.Parent = popup
-
-    local recentFrame = Instance.new("Frame")
-    recentFrame.Size = UDim2.new(1, 0, 0, 26)
-    recentFrame.BackgroundTransparency = 1
-    recentFrame.ZIndex = 51
-    recentFrame.Parent = popup
-
-    local recentLayout = Instance.new("UIListLayout")
-    recentLayout.FillDirection = Enum.FillDirection.Horizontal
-    recentLayout.Padding = UDim.new(0, 5)
-    recentLayout.Parent = recentFrame
-
-    local function refreshRecent()
-        for _, child in ipairs(recentFrame:GetChildren()) do
-            if child:IsA("TextButton") then child:Destroy() end
-        end
-        for _, col in ipairs(recent) do
-            local s = Instance.new("TextButton")
-            s.Size = UDim2.new(0, 22, 0, 22)
-            s.BackgroundColor3 = col
-            s.Text = ""
-            s.AutoButtonColor = false
-            s.ZIndex = 52
-            s.Parent = recentFrame
-            Corner(s, 5)
-            s.MouseButton1Click:Connect(function()
-                setColor(col)
-            end)
-        end
-    end
-
-    local rainbowBtn = Instance.new("TextButton")
-    rainbowBtn.Size = UDim2.new(1, 0, 0, 28)
-    rainbowBtn.BackgroundColor3 = Theme.SurfaceLight
-    rainbowBtn.Text = "Rainbow"
-    rainbowBtn.TextColor3 = Theme.Text
-    rainbowBtn.Font = Enum.Font.Gotham
-    rainbowBtn.TextSize = 12
-    rainbowBtn.AutoButtonColor = false
-    rainbowBtn.ZIndex = 51
-    rainbowBtn.Parent = popup
-    Corner(rainbowBtn, 6)
-
-    local rainbowOn = false
-    local rainbowConn = nil
-
-    rainbowBtn.MouseButton1Click:Connect(function()
-        rainbowOn = not rainbowOn
-        rainbowBtn.Text = rainbowOn and "Rainbow  •  ON" or "Rainbow"
-        rainbowBtn.BackgroundColor3 = rainbowOn and Theme.Accent or Theme.SurfaceLight
-
-        if rainbowConn then
-            rainbowConn:Disconnect()
-            rainbowConn = nil
-        end
-
-        if rainbowOn then
-            local h = 0
-            rainbowConn = game:GetService("RunService").RenderStepped:Connect(function(dt)
-                h = (h + dt * 0.15) % 1
-                local c = Color3.fromHSV(h, 1, 1)
+            local function setColor(c)
                 current = c
                 prev.BackgroundColor3 = c
+                if not table.find(recent, c) then
+                    table.insert(recent, 1, c)
+                    if #recent > 8 then table.remove(recent) end
+                end
                 if opts.Callback then opts.Callback(c) end
-            end)
-        end
-    end)
+            end
 
-    local open = false
-    prev.MouseButton1Click:Connect(function()
-        open = not open
-        if open then
-            popup.Visible = true
-            Tween(popup, {Size = UDim2.new(0, 220, 0, 210)}, 0.2)
-            refreshRecent()
-        else
-            Tween(popup, {Size = UDim2.new(0, 220, 0, 0)}, 0.15)
-            task.delay(0.15, function()
-                if not open then popup.Visible = false end
-            end)
-        end
-    end)
+            for _, col in ipairs(palette) do
+                local swatch = Instance.new("TextButton")
+                swatch.BackgroundColor3 = col
+                swatch.Text = ""
+                swatch.AutoButtonColor = false
+                swatch.ZIndex = 52
+                swatch.Parent = grid
+                Corner(swatch, 5)
+                swatch.MouseButton1Click:Connect(function()
+                    setColor(col)
+                end)
+            end
 
-    return {
-        Set = function(c)
-            setColor(c)
-        end,
-        Get = function()
-            return current
-        end,
-    }
-end
+            local recentTitle = Instance.new("TextLabel")
+            recentTitle.Size = UDim2.new(1, 0, 0, 16)
+            recentTitle.BackgroundTransparency = 1
+            recentTitle.Text = "Recent"
+            recentTitle.TextColor3 = Theme.TextDim
+            recentTitle.Font = Enum.Font.Gotham
+            recentTitle.TextSize = 11
+            recentTitle.TextXAlignment = Enum.TextXAlignment.Left
+            recentTitle.ZIndex = 51
+            recentTitle.Parent = popup
+
+            local recentFrame = Instance.new("Frame")
+            recentFrame.Size = UDim2.new(1, 0, 0, 26)
+            recentFrame.BackgroundTransparency = 1
+            recentFrame.ZIndex = 51
+            recentFrame.Parent = popup
+
+            local recentLayout = Instance.new("UIListLayout")
+            recentLayout.FillDirection = Enum.FillDirection.Horizontal
+            recentLayout.Padding = UDim.new(0, 5)
+            recentLayout.Parent = recentFrame
+
+            local function refreshRecent()
+                for _, child in ipairs(recentFrame:GetChildren()) do
+                    if child:IsA("TextButton") then child:Destroy() end
+                end
+                for _, col in ipairs(recent) do
+                    local s = Instance.new("TextButton")
+                    s.Size = UDim2.new(0, 22, 0, 22)
+                    s.BackgroundColor3 = col
+                    s.Text = ""
+                    s.AutoButtonColor = false
+                    s.ZIndex = 52
+                    s.Parent = recentFrame
+                    Corner(s, 5)
+                    s.MouseButton1Click:Connect(function()
+                        setColor(col)
+                    end)
+                end
+            end
+
+            local rainbowBtn = Instance.new("TextButton")
+            rainbowBtn.Size = UDim2.new(1, 0, 0, 28)
+            rainbowBtn.BackgroundColor3 = Theme.SurfaceLight
+            rainbowBtn.Text = "Rainbow"
+            rainbowBtn.TextColor3 = Theme.Text
+            rainbowBtn.Font = Enum.Font.Gotham
+            rainbowBtn.TextSize = 12
+            rainbowBtn.AutoButtonColor = false
+            rainbowBtn.ZIndex = 51
+            rainbowBtn.Parent = popup
+            Corner(rainbowBtn, 6)
+
+            local rainbowOn = false
+            local rainbowConn = nil
+
+            rainbowBtn.MouseButton1Click:Connect(function()
+                rainbowOn = not rainbowOn
+                rainbowBtn.Text = rainbowOn and "Rainbow  •  ON" or "Rainbow"
+                rainbowBtn.BackgroundColor3 = rainbowOn and Theme.Accent or Theme.SurfaceLight
+
+                if rainbowConn then
+                    rainbowConn:Disconnect()
+                    rainbowConn = nil
+                end
+
+                if rainbowOn then
+                    local h = 0
+                    rainbowConn = RunService.RenderStepped:Connect(function(dt)
+                        h = (h + dt * 0.15) % 1
+                        local c = Color3.fromHSV(h, 1, 1)
+                        current = c
+                        prev.BackgroundColor3 = c
+                        if opts.Callback then opts.Callback(c) end
+                    end)
+                end
+            end)
+
+            local open = false
+            prev.MouseButton1Click:Connect(function()
+                open = not open
+                if open then
+                    popup.Visible = true
+                    Tween(popup, {Size = UDim2.new(0, 220, 0, 210)}, 0.2)
+                    refreshRecent()
+                else
+                    Tween(popup, {Size = UDim2.new(0, 220, 0, 0)}, 0.15)
+                    task.delay(0.15, function()
+                        if not open then popup.Visible = false end
+                    end)
+                end
+            end)
+
+            return {
+                Set = function(c)
+                    setColor(c)
+                end,
+                Get = function()
+                    return current
+                end,
+            }
+        end
+
         return Tab
     end
 
