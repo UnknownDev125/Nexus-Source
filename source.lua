@@ -499,13 +499,17 @@ function Library:CreateWindow(cfg)
             b.ZIndex = 14
             Corner(b, 6)
 
+            -- Full screen blocker that actually swallows clicks
             local blocker = Instance.new("TextButton")
+            blocker.Name = "DropdownBlocker"
             blocker.Size = UDim2.new(1, 0, 1, 0)
             blocker.Position = UDim2.new(0, 0, 0, 0)
-            blocker.BackgroundTransparency = 1
+            blocker.BackgroundColor3 = Color3.new(0, 0, 0)
+            blocker.BackgroundTransparency = 0.99
             blocker.Text = ""
+            blocker.AutoButtonColor = false
             blocker.Visible = false
-            blocker.ZIndex = 199
+            blocker.ZIndex = 190
             blocker.Parent = gui
 
             local popup = Instance.new("Frame")
@@ -535,6 +539,7 @@ function Library:CreateWindow(cfg)
             popupLayout.Parent = popupScroll
 
             local open = false
+            local selecting = false
 
             local function closePopup()
                 if not open then return end
@@ -561,7 +566,9 @@ function Library:CreateWindow(cfg)
 
             table.insert(ActivePopups, {close = closePopup})
 
-            blocker.MouseButton1Click:Connect(closePopup)
+            blocker.MouseButton1Click:Connect(function()
+                closePopup()
+            end)
 
             for _, opt in ipairs(options) do
                 local ob = Instance.new("TextButton")
@@ -582,11 +589,16 @@ function Library:CreateWindow(cfg)
                 ob.MouseLeave:Connect(function()
                     Tween(ob, {BackgroundColor3 = Theme.Surface})
                 end)
+
                 ob.MouseButton1Click:Connect(function()
+                    selecting = true
                     current = opt
                     b.Text = opt
                     closePopup()
                     if opts.Callback then opts.Callback(opt) end
+                    task.delay(0.05, function()
+                        selecting = false
+                    end)
                 end)
             end
 
@@ -642,12 +654,15 @@ function Library:CreateWindow(cfg)
             Stroke(prev, Theme.Border, 1)
 
             local blocker = Instance.new("TextButton")
+            blocker.Name = "ColorBlocker"
             blocker.Size = UDim2.new(1, 0, 1, 0)
             blocker.Position = UDim2.new(0, 0, 0, 0)
-            blocker.BackgroundTransparency = 1
+            blocker.BackgroundColor3 = Color3.new(0, 0, 0)
+            blocker.BackgroundTransparency = 0.99
             blocker.Text = ""
+            blocker.AutoButtonColor = false
             blocker.Visible = false
-            blocker.ZIndex = 199
+            blocker.ZIndex = 190
             blocker.Parent = gui
 
             local popup = Instance.new("Frame")
