@@ -460,177 +460,150 @@ function Library:CreateWindow(cfg)
                 if opts.Callback then opts.Callback() end
             end)
         end
-function Tab:AddDropdown(opts)
-    opts = opts or {}
-    local options = opts.Options or {"Option 1"}
-    local current = opts.Default or options[1]
 
-    local f = Instance.new("Frame")
-    f.Size = UDim2.new(1, 0, 0, 34)
-    f.BackgroundColor3 = Theme.Surface
-    f.ClipsDescendants = false
-    f.Parent = page
-    f.ZIndex = 13
-    Corner(f, 8)
+        function Tab:AddDropdown(opts)
+            opts = opts or {}
+            local options = opts.Options or {"Option 1"}
+            local current = opts.Default or options[1]
 
-    local l = Instance.new("TextLabel")
-    l.Size = UDim2.new(0.42, 0, 1, 0)
-    l.Position = UDim2.new(0, 12, 0, 0)
-    l.BackgroundTransparency = 1
-    l.Text = opts.Name or "Dropdown"
-    l.TextColor3 = Theme.Text
-    l.Font = Enum.Font.Gotham
-    l.TextSize = 13
-    l.TextXAlignment = Enum.TextXAlignment.Left
-    l.Parent = f
-    l.ZIndex = 14
+            local f = Instance.new("Frame")
+            f.Size = UDim2.new(1, 0, 0, 34)
+            f.BackgroundColor3 = Theme.Surface
+            f.ClipsDescendants = false
+            f.Parent = page
+            f.ZIndex = 13
+            Corner(f, 8)
 
-    local b = Instance.new("TextButton")
-    b.Size = UDim2.new(0.5, 0, 0, 24)
-    b.Position = UDim2.new(0.48, 0, 0.5, -12)
-    b.BackgroundColor3 = Theme.SurfaceLight
-    b.Text = current
-    b.TextColor3 = Theme.Accent
-    b.Font = Enum.Font.Gotham
-    b.TextSize = 12
-    b.AutoButtonColor = false
-    b.Parent = f
-    b.ZIndex = 14
-    Corner(b, 6)
+            local l = Instance.new("TextLabel")
+            l.Size = UDim2.new(0.42, 0, 1, 0)
+            l.Position = UDim2.new(0, 12, 0, 0)
+            l.BackgroundTransparency = 1
+            l.Text = opts.Name or "Dropdown"
+            l.TextColor3 = Theme.Text
+            l.Font = Enum.Font.Gotham
+            l.TextSize = 13
+            l.TextXAlignment = Enum.TextXAlignment.Left
+            l.Parent = f
+            l.ZIndex = 14
 
-    -- Invisible blocker (no gray screen)
-    local blocker = Instance.new("TextButton")
-    blocker.Name = "DropdownBlocker"
-    blocker.Size = UDim2.new(1, 0, 1, 0)
-    blocker.Position = UDim2.new(0, 0, 0, 0)
-    blocker.BackgroundTransparency = 1
-    blocker.Text = ""
-    blocker.AutoButtonColor = false
-    blocker.Visible = false
-    blocker.ZIndex = 190
-    blocker.Parent = gui
+            local b = Instance.new("TextButton")
+            b.Size = UDim2.new(0.5, 0, 0, 24)
+            b.Position = UDim2.new(0.48, 0, 0.5, -12)
+            b.BackgroundColor3 = Theme.SurfaceLight
+            b.Text = current
+            b.TextColor3 = Theme.Accent
+            b.Font = Enum.Font.Gotham
+            b.TextSize = 12
+            b.AutoButtonColor = false
+            b.Parent = f
+            b.ZIndex = 14
+            Corner(b, 6)
 
-    local popup = Instance.new("Frame")
-    popup.Size = UDim2.new(0, 160, 0, 0)
-    popup.BackgroundColor3 = Theme.Background
-    popup.BorderSizePixel = 0
-    popup.Visible = false
-    popup.ZIndex = 200
-    popup.ClipsDescendants = true
-    popup.Active = true
-    popup.Parent = gui
-    Corner(popup, 8)
-    Stroke(popup, Theme.Border, 1)
+            local blocker = Instance.new("TextButton")
+            blocker.Size = UDim2.new(1, 0, 1, 0)
+            blocker.Position = UDim2.new(0, 0, 0, 0)
+            blocker.BackgroundTransparency = 1
+            blocker.Text = ""
+            blocker.Visible = false
+            blocker.ZIndex = 199
+            blocker.Parent = gui
 
-    local popupScroll = Instance.new("ScrollingFrame")
-    popupScroll.Size = UDim2.new(1, -8, 1, -8)
-    popupScroll.Position = UDim2.new(0, 4, 0, 4)
-    popupScroll.BackgroundTransparency = 1
-    popupScroll.ScrollBarThickness = 3
-    popupScroll.ScrollBarImageColor3 = Theme.Accent
-    popupScroll.BorderSizePixel = 0
-    popupScroll.ZIndex = 201
-    popupScroll.Parent = popup
+            local popup = Instance.new("Frame")
+            popup.Size = UDim2.new(0, 160, 0, 0)
+            popup.BackgroundColor3 = Theme.Background
+            popup.BorderSizePixel = 0
+            popup.Visible = false
+            popup.ZIndex = 200
+            popup.ClipsDescendants = true
+            popup.Parent = gui
+            Corner(popup, 8)
+            Stroke(popup, Theme.Border, 1)
 
-    local popupLayout = Instance.new("UIListLayout")
-    popupLayout.Padding = UDim.new(0, 3)
-    popupLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    popupLayout.Parent = popupScroll
+            local popupScroll = Instance.new("ScrollingFrame")
+            popupScroll.Size = UDim2.new(1, -8, 1, -8)
+            popupScroll.Position = UDim2.new(0, 4, 0, 4)
+            popupScroll.BackgroundTransparency = 1
+            popupScroll.ScrollBarThickness = 3
+            popupScroll.ScrollBarImageColor3 = Theme.Accent
+            popupScroll.BorderSizePixel = 0
+            popupScroll.ZIndex = 201
+            popupScroll.Parent = popup
 
-    local open = false
-    local locked = false
+            local popupLayout = Instance.new("UIListLayout")
+            popupLayout.Padding = UDim.new(0, 3)
+            popupLayout.SortOrder = Enum.SortOrder.LayoutOrder
+            popupLayout.Parent = popupScroll
 
-    local function closePopup()
-        if not open then return end
-        open = false
-        locked = true
-        blocker.Visible = false
-        Tween(popup, {Size = UDim2.new(0, 160, 0, 0)}, 0.12)
-        task.delay(0.15, function()
-            if not open then
-                popup.Visible = false
-                locked = false
-            end
-        end)
-    end
+            local open = false
 
-    local function openPopup()
-        closeAllPopups()
-        open = true
-        locked = true
-        local abs = b.AbsolutePosition
-        local size = b.AbsoluteSize
-        popup.Position = UDim2.new(0, abs.X + size.X - 160, 0, abs.Y + size.Y + 4)
-        popup.Visible = true
-        blocker.Visible = true
-        local height = math.min(#options * 28 + 12, 180)
-        Tween(popup, {Size = UDim2.new(0, 160, 0, height)}, 0.15)
-        popupScroll.CanvasSize = UDim2.new(0, 0, 0, #options * 28)
-        task.delay(0.05, function()
-            locked = false
-        end)
-    end
-
-    table.insert(ActivePopups, {close = closePopup})
-
-    blocker.MouseButton1Click:Connect(function()
-        closePopup()
-    end)
-
-    for _, opt in ipairs(options) do
-        local ob = Instance.new("TextButton")
-        ob.Size = UDim2.new(1, 0, 0, 26)
-        ob.BackgroundColor3 = Theme.Surface
-        ob.Text = opt
-        ob.TextColor3 = Theme.Text
-        ob.Font = Enum.Font.Gotham
-        ob.TextSize = 12
-        ob.AutoButtonColor = false
-        ob.ZIndex = 202
-        ob.Parent = popupScroll
-        Corner(ob, 5)
-
-        ob.MouseEnter:Connect(function()
-            if not locked then
-                Tween(ob, {BackgroundColor3 = Theme.SurfaceLight})
-            end
-        end)
-        ob.MouseLeave:Connect(function()
-            Tween(ob, {BackgroundColor3 = Theme.Surface})
-        end)
-
-        ob.MouseButton1Click:Connect(function()
-            if locked then return end
-            locked = true
-            current = opt
-            b.Text = opt
-            closePopup()
-            if opts.Callback then
-                task.defer(function()
-                    opts.Callback(opt)
+            local function closePopup()
+                if not open then return end
+                open = false
+                blocker.Visible = false
+                Tween(popup, {Size = UDim2.new(0, 160, 0, 0)}, 0.12)
+                task.delay(0.12, function()
+                    if not open then popup.Visible = false end
                 end)
             end
-            task.delay(0.2, function()
-                locked = false
-            end)
-        end)
-    end
 
-    b.MouseButton1Click:Connect(function()
-        if locked then return end
-        if open then closePopup() else openPopup() end
-    end)
-
-    return {
-        Set = function(v)
-            if table.find(options, v) then
-                current = v
-                b.Text = v
+            local function openPopup()
+                closeAllPopups()
+                open = true
+                local abs = b.AbsolutePosition
+                local size = b.AbsoluteSize
+                popup.Position = UDim2.new(0, abs.X + size.X - 160, 0, abs.Y + size.Y + 4)
+                popup.Visible = true
+                blocker.Visible = true
+                local height = math.min(#options * 28 + 12, 180)
+                Tween(popup, {Size = UDim2.new(0, 160, 0, height)}, 0.15)
+                popupScroll.CanvasSize = UDim2.new(0, 0, 0, #options * 28)
             end
-        end,
-        Get = function() return current end,
-    }
-end
+
+            table.insert(ActivePopups, {close = closePopup})
+
+            blocker.MouseButton1Click:Connect(closePopup)
+
+            for _, opt in ipairs(options) do
+                local ob = Instance.new("TextButton")
+                ob.Size = UDim2.new(1, 0, 0, 26)
+                ob.BackgroundColor3 = Theme.Surface
+                ob.Text = opt
+                ob.TextColor3 = Theme.Text
+                ob.Font = Enum.Font.Gotham
+                ob.TextSize = 12
+                ob.AutoButtonColor = false
+                ob.ZIndex = 202
+                ob.Parent = popupScroll
+                Corner(ob, 5)
+
+                ob.MouseEnter:Connect(function()
+                    Tween(ob, {BackgroundColor3 = Theme.SurfaceLight})
+                end)
+                ob.MouseLeave:Connect(function()
+                    Tween(ob, {BackgroundColor3 = Theme.Surface})
+                end)
+                ob.MouseButton1Click:Connect(function()
+                    current = opt
+                    b.Text = opt
+                    closePopup()
+                    if opts.Callback then opts.Callback(opt) end
+                end)
+            end
+
+            b.MouseButton1Click:Connect(function()
+                if open then closePopup() else openPopup() end
+            end)
+
+            return {
+                Set = function(v)
+                    if table.find(options, v) then
+                        current = v
+                        b.Text = v
+                    end
+                end,
+                Get = function() return current end,
+            }
+        end
 
         function Tab:AddColorPicker(opts)
             opts = opts or {}
@@ -669,15 +642,12 @@ end
             Stroke(prev, Theme.Border, 1)
 
             local blocker = Instance.new("TextButton")
-            blocker.Name = "ColorBlocker"
             blocker.Size = UDim2.new(1, 0, 1, 0)
             blocker.Position = UDim2.new(0, 0, 0, 0)
-            blocker.BackgroundColor3 = Color3.new(0, 0, 0)
-            blocker.BackgroundTransparency = 0.99
+            blocker.BackgroundTransparency = 1
             blocker.Text = ""
-            blocker.AutoButtonColor = false
             blocker.Visible = false
-            blocker.ZIndex = 190
+            blocker.ZIndex = 199
             blocker.Parent = gui
 
             local popup = Instance.new("Frame")
