@@ -145,11 +145,12 @@ function Library:CreateWindow(cfg)
     sideLayout.Parent = side
     Pad(side, 8, 8, 8, 8)
 
+    
     local content = Instance.new("Frame")
     content.Size = UDim2.new(1, -152, 1, -52)
     content.Position = UDim2.new(0, 144, 0, 48)
     content.BackgroundTransparency = 1
-    content.ClipsDescendants = false
+    content.ClipsDescendants = true
     content.Parent = main
     content.ZIndex = 11
 
@@ -214,7 +215,7 @@ function Library:CreateWindow(cfg)
         indicator.Parent = btn
         indicator.ZIndex = 13
         Corner(indicator, 2)
-
+        
         local page = Instance.new("ScrollingFrame")
         page.Size = UDim2.new(1, 0, 1, 0)
         page.BackgroundTransparency = 1
@@ -223,7 +224,9 @@ function Library:CreateWindow(cfg)
         page.CanvasSize = UDim2.new(0, 0, 0, 0)
         page.Visible = false
         page.BorderSizePixel = 0
-        page.ClipsDescendants = false
+        page.ClipsDescendants = true
+        page.ScrollingEnabled = true
+        page.ElasticBehavior = Enum.ElasticBehavior.Never
         page.Parent = content
         page.ZIndex = 12
         Pad(page, 0, 8, 0, 6)
@@ -233,7 +236,7 @@ function Library:CreateWindow(cfg)
         layout.SortOrder = Enum.SortOrder.LayoutOrder
         layout.Parent = page
         layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
-            page.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 12)
+        page.CanvasSize = UDim2.new(0, 0, 0, layout.AbsoluteContentSize.Y + 16)
         end)
 
         Tab.Button = btn
