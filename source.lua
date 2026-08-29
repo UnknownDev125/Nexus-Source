@@ -49,6 +49,7 @@ local Library = {}
 function Library:CreateWindow(cfg)
     cfg = cfg or {}
     local Window = {}
+    local ActivePopups = {}
 
     local gui = Instance.new("ScreenGui")
     gui.Name = "Aether"
@@ -158,9 +159,20 @@ function Library:CreateWindow(cfg)
     Window.Main = main
     Window.Gui = gui
 
+    local function closeAllPopups()
+        for _, popupData in ipairs(ActivePopups) do
+            if popupData.close then
+                popupData.close()
+            end
+        end
+    end
+
     local function setVis(v)
         Window.Visible = v
         main.Visible = v
+        if not v then
+            closeAllPopups()
+        end
         Tween(openIcon, {TextColor3 = v and Theme.Accent or Theme.TextDim})
         Tween(openStroke, {Color = v and Theme.Accent or Theme.Border})
     end
@@ -240,6 +252,7 @@ function Library:CreateWindow(cfg)
             Tween(btn, {BackgroundColor3 = Theme.SurfaceLight})
             btn.TextColor3 = Theme.Text
             Window.CurrentTab = Tab
+            closeAllPopups()
         end
 
         btn.MouseButton1Click:Connect(select)
@@ -486,7 +499,15 @@ function Library:CreateWindow(cfg)
             b.ZIndex = 14
             Corner(b, 6)
 
-            -- Popup parented to ScreenGui so it always sits on top
+            local blocker = Instance.new("TextButton")
+            blocker.Size = UDim2.new(1, 0, 1, 0)
+            blocker.Position = UDim2.new(0, 0, 0, 0)
+            blocker.BackgroundTransparency = 1
+            blocker.Text = ""
+            blocker.Visible = false
+            blocker.ZIndex = 199
+            blocker.Parent = gui
+
             local popup = Instance.new("Frame")
             popup.Size = UDim2.new(0, 160, 0, 0)
             popup.BackgroundColor3 = Theme.Background
@@ -516,7 +537,9 @@ function Library:CreateWindow(cfg)
             local open = false
 
             local function closePopup()
+                if not open then return end
                 open = false
+                blocker.Visible = false
                 Tween(popup, {Size = UDim2.new(0, 160, 0, 0)}, 0.12)
                 task.delay(0.12, function()
                     if not open then popup.Visible = false end
@@ -524,15 +547,21 @@ function Library:CreateWindow(cfg)
             end
 
             local function openPopup()
+                closeAllPopups()
                 open = true
                 local abs = b.AbsolutePosition
                 local size = b.AbsoluteSize
                 popup.Position = UDim2.new(0, abs.X + size.X - 160, 0, abs.Y + size.Y + 4)
                 popup.Visible = true
+                blocker.Visible = true
                 local height = math.min(#options * 28 + 12, 180)
                 Tween(popup, {Size = UDim2.new(0, 160, 0, height)}, 0.15)
                 popupScroll.CanvasSize = UDim2.new(0, 0, 0, #options * 28)
             end
+
+            table.insert(ActivePopups, {close = closePopup})
+
+            blocker.MouseButton1Click:Connect(closePopup)
 
             for _, opt in ipairs(options) do
                 local ob = Instance.new("TextButton")
@@ -612,7 +641,15 @@ function Library:CreateWindow(cfg)
             Corner(prev, 6)
             Stroke(prev, Theme.Border, 1)
 
-            -- Popup parented to ScreenGui so it always sits on top
+            local blocker = Instance.new("TextButton")
+            blocker.Size = UDim2.new(1, 0, 1, 0)
+            blocker.Position = UDim2.new(0, 0, 0, 0)
+            blocker.BackgroundTransparency = 1
+            blocker.Text = ""
+            blocker.Visible = false
+            blocker.ZIndex = 199
+            blocker.Parent = gui
+
             local popup = Instance.new("Frame")
             popup.Size = UDim2.new(0, 230, 0, 0)
             popup.BackgroundColor3 = Theme.Background
@@ -833,23 +870,37 @@ function Library:CreateWindow(cfg)
             end)
 
             local open = false
+
+            local function closePopup()
+                if not open then return end
+                open = false
+                blocker.Visible = false
+                Tween(popup, {Size = UDim2.new(0, 230, 0, 0)}, 0.15)
+                task.delay(0.15, function()
+                    if not open then popup.Visible = false end
+                end)
+            end
+
+            table.insert(ActivePopups, {close = closePopup})
+
+            blocker.MouseButton1Click:Connect(closePopup)
+
             prev.MouseButton1Click:Connect(function()
-                open = not open
                 if open then
+                    closePopup()
+                else
+                    closeAllPopups()
+                    open = true
                     local abs = prev.AbsolutePosition
                     local size = prev.AbsoluteSize
                     popup.Position = UDim2.new(0, abs.X + size.X - 230, 0, abs.Y + size.Y + 6)
                     popup.Visible = true
+                    blocker.Visible = true
                     Tween(popup, {Size = UDim2.new(0, 230, 0, 250)}, 0.2)
                     refreshRecent()
                     rBox.Text = "R " .. math.floor(current.R * 255)
                     gBox.Text = "G " .. math.floor(current.G * 255)
                     bBox.Text = "B " .. math.floor(current.B * 255)
-                else
-                    Tween(popup, {Size = UDim2.new(0, 230, 0, 0)}, 0.15)
-                    task.delay(0.15, function()
-                        if not open then popup.Visible = false end
-                    end)
                 end
             end)
 
