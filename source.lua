@@ -53,7 +53,7 @@ function Library:CreateWindow(cfg)
     local gui = Instance.new("ScreenGui")
     gui.Name = "Aether"
     gui.ResetOnSpawn = false
-    gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    gui.ZIndexBehavior = Enum.ZIndexBehavior.Global
     pcall(function() gui.Parent = CoreGui end)
     if not gui.Parent then
         gui.Parent = LocalPlayer:WaitForChild("PlayerGui")
@@ -84,6 +84,7 @@ function Library:CreateWindow(cfg)
     main.Draggable = true
     main.ClipsDescendants = false
     main.Parent = gui
+    main.ZIndex = 10
     Corner(main, 12)
     Stroke(main, Theme.Border, 1)
 
@@ -92,6 +93,7 @@ function Library:CreateWindow(cfg)
     top.BackgroundColor3 = Theme.Surface
     top.BorderSizePixel = 0
     top.Parent = main
+    top.ZIndex = 11
     Corner(top, 12)
 
     local topFix = Instance.new("Frame")
@@ -100,6 +102,7 @@ function Library:CreateWindow(cfg)
     topFix.BackgroundColor3 = Theme.Surface
     topFix.BorderSizePixel = 0
     topFix.Parent = top
+    topFix.ZIndex = 11
 
     local title = Instance.new("TextLabel")
     title.Size = UDim2.new(1, -50, 1, 0)
@@ -111,6 +114,7 @@ function Library:CreateWindow(cfg)
     title.TextSize = 15
     title.TextXAlignment = Enum.TextXAlignment.Left
     title.Parent = top
+    title.ZIndex = 12
 
     local close = Instance.new("TextButton")
     close.Size = UDim2.new(0, 28, 0, 28)
@@ -122,6 +126,7 @@ function Library:CreateWindow(cfg)
     close.TextSize = 18
     close.AutoButtonColor = false
     close.Parent = top
+    close.ZIndex = 12
     Corner(close, 7)
 
     local side = Instance.new("Frame")
@@ -130,6 +135,7 @@ function Library:CreateWindow(cfg)
     side.BackgroundColor3 = Theme.Surface
     side.BorderSizePixel = 0
     side.Parent = main
+    side.ZIndex = 11
     Corner(side, 10)
 
     local sideLayout = Instance.new("UIListLayout")
@@ -144,6 +150,7 @@ function Library:CreateWindow(cfg)
     content.BackgroundTransparency = 1
     content.ClipsDescendants = false
     content.Parent = main
+    content.ZIndex = 11
 
     Window.Tabs = {}
     Window.CurrentTab = nil
@@ -183,6 +190,7 @@ function Library:CreateWindow(cfg)
         btn.TextXAlignment = Enum.TextXAlignment.Left
         btn.AutoButtonColor = false
         btn.Parent = side
+        btn.ZIndex = 12
         Corner(btn, 7)
 
         local indicator = Instance.new("Frame")
@@ -192,6 +200,7 @@ function Library:CreateWindow(cfg)
         indicator.BorderSizePixel = 0
         indicator.Visible = false
         indicator.Parent = btn
+        indicator.ZIndex = 13
         Corner(indicator, 2)
 
         local page = Instance.new("ScrollingFrame")
@@ -204,6 +213,7 @@ function Library:CreateWindow(cfg)
         page.BorderSizePixel = 0
         page.ClipsDescendants = false
         page.Parent = content
+        page.ZIndex = 12
         Pad(page, 0, 8, 0, 6)
 
         local layout = Instance.new("UIListLayout")
@@ -248,6 +258,7 @@ function Library:CreateWindow(cfg)
             f.Size = UDim2.new(1, 0, 0, 22)
             f.BackgroundTransparency = 1
             f.Parent = page
+            f.ZIndex = 13
             local l = Instance.new("TextLabel")
             l.Size = UDim2.new(1, 0, 1, 0)
             l.BackgroundTransparency = 1
@@ -257,6 +268,7 @@ function Library:CreateWindow(cfg)
             l.TextSize = 12
             l.TextXAlignment = Enum.TextXAlignment.Left
             l.Parent = f
+            l.ZIndex = 13
         end
 
         function Tab:AddLabel(text)
@@ -269,6 +281,7 @@ function Library:CreateWindow(cfg)
             l.TextSize = 12
             l.TextXAlignment = Enum.TextXAlignment.Left
             l.Parent = page
+            l.ZIndex = 13
         end
 
         function Tab:AddToggle(opts)
@@ -277,6 +290,7 @@ function Library:CreateWindow(cfg)
             f.Size = UDim2.new(1, 0, 0, 34)
             f.BackgroundColor3 = Theme.Surface
             f.Parent = page
+            f.ZIndex = 13
             Corner(f, 8)
 
             local l = Instance.new("TextLabel")
@@ -289,12 +303,14 @@ function Library:CreateWindow(cfg)
             l.TextSize = 13
             l.TextXAlignment = Enum.TextXAlignment.Left
             l.Parent = f
+            l.ZIndex = 14
 
             local track = Instance.new("Frame")
             track.Size = UDim2.new(0, 38, 0, 20)
             track.Position = UDim2.new(1, -48, 0.5, -10)
             track.BackgroundColor3 = opts.Default and Theme.Accent or Theme.SurfaceLight
             track.Parent = f
+            track.ZIndex = 14
             Corner(track, 10)
 
             local knob = Instance.new("Frame")
@@ -302,6 +318,7 @@ function Library:CreateWindow(cfg)
             knob.Position = opts.Default and UDim2.new(1, -18, 0.5, -8) or UDim2.new(0, 2, 0.5, -8)
             knob.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             knob.Parent = track
+            knob.ZIndex = 15
             Corner(knob, 8)
 
             local state = opts.Default or false
@@ -310,6 +327,7 @@ function Library:CreateWindow(cfg)
             hit.BackgroundTransparency = 1
             hit.Text = ""
             hit.Parent = f
+            hit.ZIndex = 16
 
             hit.MouseButton1Click:Connect(function()
                 state = not state
@@ -338,6 +356,7 @@ function Library:CreateWindow(cfg)
             f.Size = UDim2.new(1, 0, 0, 52)
             f.BackgroundColor3 = Theme.Surface
             f.Parent = page
+            f.ZIndex = 13
             Corner(f, 8)
 
             local l = Instance.new("TextLabel")
@@ -350,18 +369,21 @@ function Library:CreateWindow(cfg)
             l.TextSize = 13
             l.TextXAlignment = Enum.TextXAlignment.Left
             l.Parent = f
+            l.ZIndex = 14
 
             local bar = Instance.new("Frame")
             bar.Size = UDim2.new(1, -24, 0, 6)
             bar.Position = UDim2.new(0, 12, 0, 34)
             bar.BackgroundColor3 = Theme.SurfaceLight
             bar.Parent = f
+            bar.ZIndex = 14
             Corner(bar, 3)
 
             local fill = Instance.new("Frame")
             fill.Size = UDim2.new((default - min) / math.max(max - min, 1), 0, 1, 0)
             fill.BackgroundColor3 = Theme.Accent
             fill.Parent = bar
+            fill.ZIndex = 15
             Corner(fill, 3)
 
             local value = default
@@ -414,6 +436,7 @@ function Library:CreateWindow(cfg)
             b.TextSize = 13
             b.AutoButtonColor = false
             b.Parent = page
+            b.ZIndex = 13
             Corner(b, 8)
 
             b.MouseEnter:Connect(function() Tween(b, {BackgroundColor3 = Theme.SurfaceLight}) end)
@@ -435,6 +458,7 @@ function Library:CreateWindow(cfg)
             f.BackgroundColor3 = Theme.Surface
             f.ClipsDescendants = false
             f.Parent = page
+            f.ZIndex = 13
             Corner(f, 8)
 
             local l = Instance.new("TextLabel")
@@ -447,6 +471,7 @@ function Library:CreateWindow(cfg)
             l.TextSize = 13
             l.TextXAlignment = Enum.TextXAlignment.Left
             l.Parent = f
+            l.ZIndex = 14
 
             local b = Instance.new("TextButton")
             b.Size = UDim2.new(0.5, 0, 0, 24)
@@ -458,17 +483,18 @@ function Library:CreateWindow(cfg)
             b.TextSize = 12
             b.AutoButtonColor = false
             b.Parent = f
+            b.ZIndex = 14
             Corner(b, 6)
 
+            -- Popup parented to ScreenGui so it always sits on top
             local popup = Instance.new("Frame")
             popup.Size = UDim2.new(0, 160, 0, 0)
-            popup.Position = UDim2.new(1, -170, 0, 36)
             popup.BackgroundColor3 = Theme.Background
             popup.BorderSizePixel = 0
             popup.Visible = false
-            popup.ZIndex = 60
+            popup.ZIndex = 200
             popup.ClipsDescendants = true
-            popup.Parent = f
+            popup.Parent = gui
             Corner(popup, 8)
             Stroke(popup, Theme.Border, 1)
 
@@ -479,7 +505,7 @@ function Library:CreateWindow(cfg)
             popupScroll.ScrollBarThickness = 3
             popupScroll.ScrollBarImageColor3 = Theme.Accent
             popupScroll.BorderSizePixel = 0
-            popupScroll.ZIndex = 61
+            popupScroll.ZIndex = 201
             popupScroll.Parent = popup
 
             local popupLayout = Instance.new("UIListLayout")
@@ -488,7 +514,6 @@ function Library:CreateWindow(cfg)
             popupLayout.Parent = popupScroll
 
             local open = false
-            local optionButtons = {}
 
             local function closePopup()
                 open = false
@@ -500,8 +525,11 @@ function Library:CreateWindow(cfg)
 
             local function openPopup()
                 open = true
+                local abs = b.AbsolutePosition
+                local size = b.AbsoluteSize
+                popup.Position = UDim2.new(0, abs.X + size.X - 160, 0, abs.Y + size.Y + 4)
                 popup.Visible = true
-                local height = math.min(#options * 28 + 12, 160)
+                local height = math.min(#options * 28 + 12, 180)
                 Tween(popup, {Size = UDim2.new(0, 160, 0, height)}, 0.15)
                 popupScroll.CanvasSize = UDim2.new(0, 0, 0, #options * 28)
             end
@@ -515,7 +543,7 @@ function Library:CreateWindow(cfg)
                 ob.Font = Enum.Font.Gotham
                 ob.TextSize = 12
                 ob.AutoButtonColor = false
-                ob.ZIndex = 62
+                ob.ZIndex = 202
                 ob.Parent = popupScroll
                 Corner(ob, 5)
 
@@ -531,7 +559,6 @@ function Library:CreateWindow(cfg)
                     closePopup()
                     if opts.Callback then opts.Callback(opt) end
                 end)
-                table.insert(optionButtons, ob)
             end
 
             b.MouseButton1Click:Connect(function()
@@ -559,6 +586,7 @@ function Library:CreateWindow(cfg)
             f.BackgroundColor3 = Theme.Surface
             f.ClipsDescendants = false
             f.Parent = page
+            f.ZIndex = 13
             Corner(f, 8)
 
             local l = Instance.new("TextLabel")
@@ -571,6 +599,7 @@ function Library:CreateWindow(cfg)
             l.TextSize = 13
             l.TextXAlignment = Enum.TextXAlignment.Left
             l.Parent = f
+            l.ZIndex = 14
 
             local prev = Instance.new("TextButton")
             prev.Size = UDim2.new(0, 26, 0, 26)
@@ -579,18 +608,19 @@ function Library:CreateWindow(cfg)
             prev.Text = ""
             prev.AutoButtonColor = false
             prev.Parent = f
+            prev.ZIndex = 14
             Corner(prev, 6)
             Stroke(prev, Theme.Border, 1)
 
+            -- Popup parented to ScreenGui so it always sits on top
             local popup = Instance.new("Frame")
             popup.Size = UDim2.new(0, 230, 0, 0)
-            popup.Position = UDim2.new(1, -240, 0, 38)
             popup.BackgroundColor3 = Theme.Background
             popup.BorderSizePixel = 0
             popup.Visible = false
-            popup.ZIndex = 70
+            popup.ZIndex = 200
             popup.ClipsDescendants = true
-            popup.Parent = f
+            popup.Parent = gui
             Corner(popup, 10)
             Stroke(popup, Theme.Border, 1)
 
@@ -608,13 +638,13 @@ function Library:CreateWindow(cfg)
             title.Font = Enum.Font.GothamBold
             title.TextSize = 12
             title.TextXAlignment = Enum.TextXAlignment.Left
-            title.ZIndex = 71
+            title.ZIndex = 201
             title.Parent = popup
 
             local grid = Instance.new("Frame")
             grid.Size = UDim2.new(1, 0, 0, 90)
             grid.BackgroundTransparency = 1
-            grid.ZIndex = 71
+            grid.ZIndex = 201
             grid.Parent = popup
 
             local gridLayout = Instance.new("UIGridLayout")
@@ -671,7 +701,7 @@ function Library:CreateWindow(cfg)
                 swatch.BackgroundColor3 = col
                 swatch.Text = ""
                 swatch.AutoButtonColor = false
-                swatch.ZIndex = 72
+                swatch.ZIndex = 202
                 swatch.Parent = grid
                 Corner(swatch, 5)
                 swatch.MouseButton1Click:Connect(function()
@@ -687,13 +717,13 @@ function Library:CreateWindow(cfg)
             recentTitle.Font = Enum.Font.Gotham
             recentTitle.TextSize = 11
             recentTitle.TextXAlignment = Enum.TextXAlignment.Left
-            recentTitle.ZIndex = 71
+            recentTitle.ZIndex = 201
             recentTitle.Parent = popup
 
             local recentFrame = Instance.new("Frame")
             recentFrame.Size = UDim2.new(1, 0, 0, 24)
             recentFrame.BackgroundTransparency = 1
-            recentFrame.ZIndex = 71
+            recentFrame.ZIndex = 201
             recentFrame.Parent = popup
 
             local recentLayout = Instance.new("UIListLayout")
@@ -711,7 +741,7 @@ function Library:CreateWindow(cfg)
                     s.BackgroundColor3 = col
                     s.Text = ""
                     s.AutoButtonColor = false
-                    s.ZIndex = 72
+                    s.ZIndex = 202
                     s.Parent = recentFrame
                     Corner(s, 5)
                     s.MouseButton1Click:Connect(function()
@@ -723,7 +753,7 @@ function Library:CreateWindow(cfg)
             local rgbFrame = Instance.new("Frame")
             rgbFrame.Size = UDim2.new(1, 0, 0, 28)
             rgbFrame.BackgroundTransparency = 1
-            rgbFrame.ZIndex = 71
+            rgbFrame.ZIndex = 201
             rgbFrame.Parent = popup
 
             local rgbLayout = Instance.new("UIListLayout")
@@ -740,7 +770,7 @@ function Library:CreateWindow(cfg)
                 box.Font = Enum.Font.Gotham
                 box.TextSize = 11
                 box.ClearTextOnFocus = false
-                box.ZIndex = 72
+                box.ZIndex = 202
                 box.Parent = rgbFrame
                 Corner(box, 5)
                 return box
@@ -766,14 +796,14 @@ function Library:CreateWindow(cfg)
             bBox.FocusLost:Connect(applyRGB)
 
             local rainbowBtn = Instance.new("TextButton")
-            rainbowBtn.Size = UDim2.new(1, 0, 0, 28)
+            rainbowBtn.Size = UDim2.new(1, 0, 0, 30)
             rainbowBtn.BackgroundColor3 = Theme.SurfaceLight
             rainbowBtn.Text = "Rainbow"
             rainbowBtn.TextColor3 = Theme.Text
             rainbowBtn.Font = Enum.Font.Gotham
             rainbowBtn.TextSize = 12
             rainbowBtn.AutoButtonColor = false
-            rainbowBtn.ZIndex = 71
+            rainbowBtn.ZIndex = 201
             rainbowBtn.Parent = popup
             Corner(rainbowBtn, 6)
 
@@ -806,8 +836,11 @@ function Library:CreateWindow(cfg)
             prev.MouseButton1Click:Connect(function()
                 open = not open
                 if open then
+                    local abs = prev.AbsolutePosition
+                    local size = prev.AbsoluteSize
+                    popup.Position = UDim2.new(0, abs.X + size.X - 230, 0, abs.Y + size.Y + 6)
                     popup.Visible = true
-                    Tween(popup, {Size = UDim2.new(0, 230, 0, 230)}, 0.2)
+                    Tween(popup, {Size = UDim2.new(0, 230, 0, 250)}, 0.2)
                     refreshRecent()
                     rBox.Text = "R " .. math.floor(current.R * 255)
                     gBox.Text = "G " .. math.floor(current.G * 255)
