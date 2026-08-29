@@ -1,14 +1,3 @@
---[[
-    Orion-Style UI Library
-    Usage:
-        local Library = loadstring(game:HttpGet("YOUR_LINK"))()
-        local Window = Library:CreateWindow({Name = "My Script"})
-        local Tab = Window:AddTab("Main")
-        Tab:AddToggle({Name = "Enabled", Default = false, Callback = function(v) print(v) end})
-]]
-
-if not game:IsLoaded() then game.Loaded:Wait() end
-
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local TweenService = game:GetService("TweenService")
@@ -61,11 +50,13 @@ function Library:CreateWindow(cfg)
     local Window = {}
 
     local gui = Instance.new("ScreenGui")
-    gui.Name = "OrionLib"
+    gui.Name = "Aether"
     gui.ResetOnSpawn = false
     gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
     pcall(function() gui.Parent = CoreGui end)
-    if not gui.Parent then gui.Parent = LocalPlayer:WaitForChild("PlayerGui") end
+    if not gui.Parent then
+        gui.Parent = LocalPlayer:WaitForChild("PlayerGui")
+    end
 
     local openBtn = Instance.new("ImageButton")
     openBtn.Size = UDim2.new(0, 42, 0, 42)
