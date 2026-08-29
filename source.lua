@@ -498,13 +498,12 @@ function Tab:AddDropdown(opts)
     b.ZIndex = 14
     Corner(b, 6)
 
-    -- Solid blocker that fully captures mouse
+    -- Invisible blocker (no gray screen)
     local blocker = Instance.new("TextButton")
     blocker.Name = "DropdownBlocker"
     blocker.Size = UDim2.new(1, 0, 1, 0)
     blocker.Position = UDim2.new(0, 0, 0, 0)
-    blocker.BackgroundColor3 = Color3.new(0, 0, 0)
-    blocker.BackgroundTransparency = 0.6
+    blocker.BackgroundTransparency = 1
     blocker.Text = ""
     blocker.AutoButtonColor = false
     blocker.Visible = false
